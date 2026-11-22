@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONZZ IP INTEL</title>
+    <style>
+        :root {
+            --neon-purple: #b300ff;
+            --wa-green: #25D366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: #050505;
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-container { width: 100%; max-width: 550px; }
+
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        h1 { font-size: 1.2em; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; text-align: center; color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-purple); }
+
+        input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #444;
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            background: var(--neon-purple);
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        button:hover { filter: brightness(1.2); box-shadow: 0 0 15px var(--neon-purple); }
+
+        /* Tampilan hasil */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .data-box { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; border-left: 2px solid var(--neon-purple); }
+        .label { font-size: 0.65em; color: #ccc; text-transform: uppercase; }
+        .value { font-size: 0.85em; font-weight: 600; margin-top: 2px; }
+        
+        #dynamicSection { display: none; margin-top: 20px; border-top: 1px solid #444; padding-top: 20px; }
+        .port-item { background: rgba(179,0,255,0.1); padding: 15px; border-radius: 8px; font-size: 0.9em; text-align: center; border: 1px solid var(--neon-purple); color: white; }
+
+        /* Footer Channel */
+        .footer-connect { margin-top: 30px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .wa-link { color: #fff; text-decoration: none; font-size: 0.85em; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px; }
+        .wa-link:hover { background: var(--wa-green); color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="card">
+            <h1>DONZZ IP INTEL</h1>
+            
+            <input type="text" id="ipInput" placeholder="Enter IP Address...">
+            <button onclick="lookup()">EXECUTE SCAN</button>
+
+            <div id="resultArea"></div>
+
+            <div id="dynamicSection">
+                <div style="font-size: 0.8em; margin-bottom: 10px; color: var(--neon-purple); text-align: center;">RECOMMENDED SOCKS5 PORT</div>
+                <div class="port-grid" id="portList"></div>
+            </div>
+
+            <!-- Footer Saluran WhatsApp -->
+            <div class="footer-connect">
+                <a href="https://whatsapp.com/channel/0029Vb84HxJChq6EmzWTyW3h" target="_blank" class="wa-link">
+                    <span>📢 Gabung Saluran Donzz</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function lookup() {
+            const ip = document.getElementById('ipInput').value;
+            const res = document.getElementById('resultArea');
+            const dynamic = document.getElementById('dynamicSection');
+            
+            if(!ip) return;
+            res.innerHTML = "<div style='text-align:center; color:#555; margin-top:10px;'>Querying...</div>";
+            
+            fetch(`https://ipapi.co/${ip}/json/`)
+            .then(r => r.json())
+            .then(data => {
+                if(data.error) {
+                    res.innerHTML = `<div style="color:#ff4d4d; text-align:center; margin-top:10px;">Error: ${data.reason}</div>`;
+                } else {
+                    res.innerHTML = `
+                        <div class="info-grid">
+                            <div class="data-box"><div class="label">City</div><div class="value">${data.city || 'N/A'}</div></div>
+                            <div class="data-box"><div class="label">Region</div><div class="value">${data.region || 'N/A'}</div></div>
+                            <div class="data-box"><div class="label">Postal</div><div class="value">${data.postal || 'N/A'}</div></div>
+                            <div class="data-box"><div class="label">Country</div><div class="value">${data.country_name}</div></div>
+                            <div class="data-box"><div class="label">Coordinates</div><div class="value">${data.latitude}, ${data.longitude}</div></div>
+                            <div class="data-box"><div class="label">ASN</div><div class="value">${data.asn || 'N/A'}</div></div>
+                        </div>
+                        <div class="data-box" style="margin-top:15px;">
+                            <div class="label">Provider / ISP</div>
+                            <div class="value">${data.org || 'N/A'}</div>
+                        </div>
+                    `;
+                    const randomPort = Math.floor(Math.random() * (65535 - 1025 + 1)) + 1025;
+                    document.getElementById('portList').innerHTML = `<div class="port-item">PORT: <b>${randomPort}</b></div>`;
+                    dynamic.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
